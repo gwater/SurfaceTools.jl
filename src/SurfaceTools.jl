@@ -14,7 +14,7 @@ end
 
 function tangentials(f::F, p) where F <: ApproxFun.Fun
     J = [(Derivative(space(f)[1], i == 1 ? [1, 0] : [0, 1]) * f[j])(p)
-          for i in 1:2, j in 1:2]
+          for i in 1:2, j in 1:3]
     return J[:, 1], J[:, 2]
 end
 
