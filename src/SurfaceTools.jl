@@ -3,11 +3,18 @@ module SurfaceTools
 using LinearAlgebra
 using ForwardDiff
 using StaticArrays
+using ApproxFun
 
 export tangentials, normal, gram_det, curvature
 
 function tangentials(f, p)
     J = ForwardDiff.jacobian(f, p)
+    return J[:, 1], J[:, 2]
+end
+
+function tangentials(f::F, p) where F <: ApproxFun.Fun
+    J = [(Derivative(space(f)[1], i == 1 ? [1, 0] : [0, 1]) * f[j])(p)
+          for i in 1:2, j in 1:2]
     return J[:, 1], J[:, 2]
 end
 
@@ -23,6 +30,12 @@ function _first_form(f, p)
     # we use StaticArrays to get fast inversion of 2x2 matrices
     return SMatrix{2,2}(t1 ⋅ t1, t1 ⋅ t2,
                         t1 ⋅ t2, t2 ⋅ t2)
+end
+
+function _hessian(f::F, p) where F <: ApproxFun.Fun
+    return Tuple([(Derivative(space(f)[1], ifelse(i == 1, [1, 0], [0, 1]) .+
+                        ifelse(j == 1, [1, 0], [0, 1])) * f[k])(p)
+                  for i in 1:2, j in 1:2] for k in 1:3)
 end
 
 function _hessian(f, p)
