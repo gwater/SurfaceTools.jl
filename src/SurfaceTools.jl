@@ -41,8 +41,8 @@ gram_det(f, p) = norm(normal(f, p))
 function _first_form(f, p)
     t1, t2 = tangentials(f, p)
     # we use StaticArrays to get fast inversion of 2x2 matrices
-    return SMatrix{2,2}(t1 ⋅ t1, t1 ⋅ t2,
-                        t1 ⋅ t2, t2 ⋅ t2)
+    return @SMatrix [t1 ⋅ t1  t1 ⋅ t2;
+                     t1 ⋅ t2  t2 ⋅ t2]
 end
 
 function _hessian(f::F, p) where F <: Union{Fun, ApproxFunCompatible}
