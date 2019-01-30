@@ -1,9 +1,10 @@
 module SurfaceTools
 
 using LinearAlgebra
-using ForwardDiff
+#using ForwardDiff
 using StaticArrays
 using ApproxFun
+using Calculus
 
 import Base: getindex
 export ApproxFunCompatible, getindex
@@ -27,7 +28,7 @@ function tangentials(f::F, p) where F <: Union{Fun, ApproxFunCompatible}
 end
 
 function tangentials(f, p)
-    J = ForwardDiff.jacobian(f, p)
+    J = Calculus.jacobian(f, Vector(p), :central)
     return J[:, 1], J[:, 2]
 end
 
@@ -53,9 +54,9 @@ function _hessian(f::F, p) where F <: Union{Fun, ApproxFunCompatible}
 end
 
 function _hessian(f, p)
-    return ForwardDiff.hessian(p -> f(p)[1], p),
-           ForwardDiff.hessian(p -> f(p)[2], p),
-           ForwardDiff.hessian(p -> f(p)[3], p)
+    return Calculus.hessian(p -> f(p)[1], p),
+           Calculus.hessian(p -> f(p)[2], p),
+           Calculus.hessian(p -> f(p)[3], p)
 end
 
 _dot(a, b) = reduce(+, map(*, a, b))
