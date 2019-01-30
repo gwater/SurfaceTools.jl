@@ -54,9 +54,9 @@ function _hessian(f::F, p) where F <: Union{Fun, ApproxFunCompatible}
 end
 
 function _hessian(f, p)
-    return Calculus.hessian(p -> f(p)[1], p),
-           Calculus.hessian(p -> f(p)[2], p),
-           Calculus.hessian(p -> f(p)[3], p)
+    return Calculus.hessian(p -> f(p)[1], Vector(p)),
+           Calculus.hessian(p -> f(p)[2], Vector(p)),
+           Calculus.hessian(p -> f(p)[3], Vector(p))
 end
 
 _dot(a, b) = reduce(+, map(*, a, b))
