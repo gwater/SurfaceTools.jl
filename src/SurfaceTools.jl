@@ -76,7 +76,7 @@ end
 function curvature(f, p)
     form1 = _first_form(f, p)
     form2 = _second_form(f, p)
-    return 0.5(vec(inv(form1)) ⋅ vec(form2))
+    return -0.5(vec(inv(form1)) ⋅ vec(form2))
 end
 
 end # module
