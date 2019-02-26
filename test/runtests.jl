@@ -7,4 +7,5 @@ using LinearAlgebra
     s(p) = @SVector [p[1], p[2], sqrt(1 - p ⋅ p)]
     @test curvature(s, @SVector [0., 0.]) ≈ 1
     @test gram_det(s, @SVector [0., 0.]) ≈ 1
+    @test all(normal(s, @SVector [0., 0.]) .≈ [0, 0, 1])
 end
